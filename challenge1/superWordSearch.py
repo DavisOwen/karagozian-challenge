@@ -1,8 +1,23 @@
 #!/usr/bin/env python
 import sys
 
+"""
+Usage:
+
+./superWordSearch.py input_file.txt
+
+where input_file.txt has the example format specified in the instructions
+"""
+
 
 class Coordinates(object):
+    """
+    Object that keeps track of a given (x, y)
+    coordinate and handles the incremental movement
+    of the coordinate to the next grid location. Also
+    handles whether we are allowed to wrap around the grid
+    or not
+    """
     dirs = [(0, 1), (0, -1), (1, 0), (-1, 0), (1, 1),
             (1, -1), (-1, 1), (-1, -1)]
 
@@ -47,6 +62,12 @@ class Coordinates(object):
 
 
 def find_end_path(grid, letters, coord):
+    """
+    Given a string, check if the first letter exists
+    in the next coordinate position, then recursively
+    check for the rest of the string. Returns the coord
+    location of the last letter or False if not found
+    """
     letter = letters[0]
     new_coord = coord.increment()
     if new_coord and grid[new_coord[0]][new_coord[1]] == letter:
@@ -57,7 +78,17 @@ def find_end_path(grid, letters, coord):
 
 
 def find_word(grid, word, letter_map):
+    """
+    Finds a single word on the grid
+    and returns coordinate or 'NOT FOUND'
+    """
     first = word[0]
+    # find each instance of the first letter
+    # in the grid and search through all possible
+    # paths to see if the word exists
+    # if none of the paths work for the first letter,
+    # there is no need to search through the rest of the
+    # letteres
     if first in letter_map:
         for coord in letter_map[first]:
             while coord.next_direction():
@@ -68,6 +99,11 @@ def find_word(grid, word, letter_map):
 
 
 def find_words(grid, words, wrap):
+    """
+    Iterates through each word and, if found,
+    prints its coordinates or, if not found,
+    prints 'NOT FOUND'
+    """
     letter_map = {}
     # iterate through grid and store
     # every location of each letter in a
